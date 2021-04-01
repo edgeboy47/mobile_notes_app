@@ -11,17 +11,22 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  very_good_analysis: ^2.0.0
-
+  bloc: ^7.0.0
   cupertino_icons: ^1.0.2
+  equatable: ^2.0.0
+  flutter_bloc: ^7.0.0
+  hive: ^2.0.2
+  hive_flutter: ^1.0.0
+  very_good_analysis: ^2.0.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  hive_generator: ^1.0.1
+  build_runner: ^1.12.2
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
-
 # The following section is specific to Flutter.
 flutter:
   uses-material-design: true
