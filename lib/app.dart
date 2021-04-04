@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile_notes_app/data/data_sources/hive_db.dart';
 import 'package:mobile_notes_app/data/models/note.dart';
-import 'package:mobile_notes_app/data/repository.dart';
+import 'package:mobile_notes_app/data/models/tag.dart';
+import 'package:mobile_notes_app/data/models/task.dart';
 import 'package:mobile_notes_app/notes/bloc/notes_bloc.dart';
 
 class App extends StatelessWidget {
@@ -33,7 +34,8 @@ class App extends StatelessWidget {
                           itemCount: notes.length,
                           itemBuilder: (context, index) => ListTile(
                             title: Text(notes[index].title),
-                            subtitle: Text(index.toString()),
+                            subtitle: Text(notes[index].dateTime.toString()),
+                            trailing: Text(notes[index].tags.toString()),
                           ),
                         );
                       }
@@ -47,11 +49,16 @@ class App extends StatelessWidget {
                       context.read<NotesBloc>().add(
                             NoteAdded(
                               Note(
-                                title: 'Test',
-                                body: 'Test body',
-                                id: DateTime.now().toString(),
-                                dateTime: DateTime.now(),
-                              ),
+                                  title: 'Test',
+                                  body: 'Test body',
+                                  id: '1',
+                                  dateTime: DateTime.now(),
+                                  tags: const [
+                                    Tag(title: 'Test tag2'),
+                                  ],
+                                  tasks: const [
+                                    Task(body: 'Test task', isCompleted: true),
+                                  ]),
                             ),
                           );
                     },

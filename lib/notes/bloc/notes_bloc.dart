@@ -3,8 +3,6 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:mobile_notes_app/data/data_sources/data_source.dart';
 import 'package:mobile_notes_app/data/models/note.dart';
-import 'package:mobile_notes_app/data/repository.dart';
-
 part 'notes_event.dart';
 part 'notes_state.dart';
 
@@ -13,6 +11,7 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
     add(NotesLoaded());
   }
 
+  //TODO: Switch to Repository object
   final DataSource repository;
 
   @override
@@ -25,9 +24,15 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
     }
     if (event is NoteAdded) {
       await repository.addNote(event.note);
-      var notes = await repository.loadNotes();
-
-      yield NotesLoadSuccess(notes);
+      add(NotesLoaded());
+    }
+    if (event is NoteUpdated) {
+      await repository.updateNote(event.note, null);
+      add(NotesLoaded());
+    }
+    if (event is NoteDeleted) {
+      await repository.deleteNote(event.id);
+      add(NotesLoaded());
     }
   }
 }

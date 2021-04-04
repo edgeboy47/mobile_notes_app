@@ -5,6 +5,8 @@ import 'package:mobile_notes_app/data/models/note.dart';
 class HiveDatabase implements DataSource {
   HiveDatabase() : _notesBox = Hive.box('notesBox');
 
+  // TODO: Add tasks and tags boxes, and crud functions for each
+  // TODO: Link tasks to their respective note, Box<List<Task>> where note id is the key
   Box<Note> _notesBox;
 
   Future<void> _init() async {
@@ -25,13 +27,17 @@ class HiveDatabase implements DataSource {
   }
 
   @override
-  Future<void> deleteNote(String id) {
-    // TODO: implement deleteNote
-    throw UnimplementedError();
+  Future<void> deleteNote(String id) async {
+    if (_notesBox.isOpen)
+      await _notesBox.delete(id);
+    else {
+      await _init();
+      await _notesBox.delete(id);
+    }
   }
 
   @override
-  Future<List<Note>> loadNotes() async{
+  Future<List<Note>> loadNotes() async {
     if (_notesBox.isOpen)
       return _notesBox.values.toList();
     else {
@@ -41,8 +47,7 @@ class HiveDatabase implements DataSource {
   }
 
   @override
-  Future<void> updateNote() {
-    // TODO: implement updateNote
-    throw UnimplementedError();
+  Future<void> updateNote(Note note, String? id) async {
+    await addNote(note);
   }
 }

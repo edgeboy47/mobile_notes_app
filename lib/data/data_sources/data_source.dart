@@ -7,5 +7,5 @@ abstract class DataSource {
 
   Future<void> deleteNote(String id);
 
-  Future<void> updateNote();
+  Future<void> updateNote(Note note, String? id);
 }
