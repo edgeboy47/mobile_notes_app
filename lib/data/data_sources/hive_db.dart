@@ -3,46 +3,46 @@ import 'package:mobile_notes_app/data/data_sources/data_source.dart';
 import 'package:mobile_notes_app/data/models/note.dart';
 
 class HiveDatabase implements DataSource {
-  HiveDatabase() : _notesBox = Hive.box('notesBox');
+  HiveDatabase({required this.notesBox});
 
   // TODO: Add tasks and tags boxes, and crud functions for each
   // TODO: Link tasks to their respective note, Box<List<Task>> where note id is the key
-  Box<Note> _notesBox;
+  Box<Note> notesBox;
 
   Future<void> _init() async {
-    if (_notesBox.isOpen) return;
+    if (notesBox.isOpen) return;
 
     await Hive.openBox('notesBox');
-    _notesBox = Hive.box('notesBox');
+    notesBox = Hive.box('notesBox');
   }
 
   @override
   Future<void> addNote(Note note) async {
-    if (_notesBox.isOpen)
-      await _notesBox.put(note.id, note);
+    if (notesBox.isOpen)
+      await notesBox.put(note.id, note);
     else {
       await _init();
-      await _notesBox.put(note.id, note);
+      await notesBox.put(note.id, note);
     }
   }
 
   @override
   Future<void> deleteNote(String id) async {
-    if (_notesBox.isOpen)
-      await _notesBox.delete(id);
+    if (notesBox.isOpen)
+      await notesBox.delete(id);
     else {
       await _init();
-      await _notesBox.delete(id);
+      await notesBox.delete(id);
     }
   }
 
   @override
   Future<List<Note>> loadNotes() async {
-    if (_notesBox.isOpen)
-      return _notesBox.values.toList();
+    if (notesBox.isOpen)
+      return notesBox.values.toList();
     else {
       await _init();
-      return _notesBox.values.toList();
+      return notesBox.values.toList();
     }
   }
 

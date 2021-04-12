@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive/hive.dart';
 import 'package:mobile_notes_app/data/data_sources/hive_db.dart';
 import 'package:mobile_notes_app/data/models/note.dart';
 import 'package:mobile_notes_app/data/models/tag.dart';
 import 'package:mobile_notes_app/data/models/task.dart';
 import 'package:mobile_notes_app/notes/bloc/notes_bloc.dart';
+import 'package:mobile_notes_app/ui/themes.dart';
 
 class App extends StatelessWidget {
   const App({Key? key}) : super(key: key);
@@ -12,10 +14,16 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      themeMode: ThemeMode.dark,
+      darkTheme: Themes.darkTheme,
       home: Scaffold(
         body: SafeArea(
           child: BlocProvider<NotesBloc>(
-            create: (context) => NotesBloc(repository: HiveDatabase()),
+            create: (context) => NotesBloc(
+              repository: HiveDatabase(
+                notesBox: Hive.box('notesBox'),
+              ),
+            ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
@@ -31,13 +39,10 @@ class App extends StatelessWidget {
                             child: const Text('No notes found'),
                           );
                         return ListView.builder(
-                          itemCount: notes.length,
-                          itemBuilder: (context, index) => ListTile(
-                            title: Text(notes[index].title),
-                            subtitle: Text(notes[index].dateTime.toString()),
-                            trailing: Text(notes[index].tags.toString()),
-                          ),
-                        );
+                            itemCount: notes.length,
+                            itemBuilder: (context, index) => NoteCard(
+                                  note: notes[index],
+                                ));
                       }
                       return Container();
                     },
@@ -47,10 +52,13 @@ class App extends StatelessWidget {
                   builder: (context) => TextButton(
                     onPressed: () {
                       context.read<NotesBloc>().add(
-                            NoteAdded(
+                            NoteUpdated(
                               Note(
-                                  title: 'Test',
-                                  body: 'Test body',
+                                  title: 'Similarity',
+                                  body: '''
+                                      Elements that share similar properties are perceived as more related.
+                                      Any number of characteristics can be similar: colour, shape, size, texture, etc.
+                                      ''',
                                   id: '1',
                                   dateTime: DateTime.now(),
                                   tags: const [
@@ -67,6 +75,46 @@ class App extends StatelessWidget {
                 ),
               ],
             ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class NoteCard extends StatelessWidget {
+  const NoteCard({Key? key, required this.note}) : super(key: key);
+
+  final Note note;
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(15),
+        child: Container(
+          width: MediaQuery.of(context).size.width * 0.5,
+          color: const Color(0xFF171C26),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            textDirection: TextDirection.ltr,
+            children: [
+              Text(
+                note.title,
+                style: Themes.noteCardTitle,
+              ),
+              Text(
+                note.body,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  if (note.tags != null)
+                    ...note.tags!.map((e) => Text(e.title)).toList(),
+                  Text('${note.dateTime.day}'),
+                ],
+              ),
+            ],
           ),
         ),
       ),
