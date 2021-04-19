@@ -6,6 +6,7 @@ import 'package:mobile_notes_app/data/models/note.dart';
 import 'package:mobile_notes_app/data/models/tag.dart';
 import 'package:mobile_notes_app/data/models/task.dart';
 import 'package:mobile_notes_app/notes/bloc/notes_bloc.dart';
+import 'package:mobile_notes_app/ui/note_card.dart';
 import 'package:mobile_notes_app/ui/themes.dart';
 
 class App extends StatelessWidget {
@@ -13,19 +14,30 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      themeMode: ThemeMode.dark,
-      darkTheme: Themes.darkTheme,
-      home: Scaffold(
-        body: SafeArea(
-          child: BlocProvider<NotesBloc>(
-            create: (context) => NotesBloc(
-              repository: HiveDatabase(
-                notesBox: Hive.box('notesBox'),
-              ),
+    return BlocProvider<NotesBloc>(
+      create: (context) => NotesBloc(
+        repository: HiveDatabase(
+          notesBox: Hive.box('notesBox'),
+        ),
+      ),
+      child: MaterialApp(
+        themeMode: ThemeMode.dark,
+        darkTheme: Themes.darkTheme,
+        home: SafeArea(
+          child: Scaffold(
+            backgroundColor: Themes.noteColours['black'],
+            bottomNavigationBar: const BottomAppBar(
+              color: Themes.darkBackgroundColor,
+              child: Text('Bottom App Bar'),
             ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+            // floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+            floatingActionButton: FloatingActionButton(
+              backgroundColor: Themes.noteColours['blue'],
+              onPressed: null,
+              child: const Icon(Icons.add),
+            ),
+            body: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Flexible(
                   child: BlocBuilder<NotesBloc, NotesState>(
@@ -39,10 +51,11 @@ class App extends StatelessWidget {
                             child: const Text('No notes found'),
                           );
                         return ListView.builder(
-                            itemCount: notes.length,
-                            itemBuilder: (context, index) => NoteCard(
-                                  note: notes[index],
-                                ));
+                          itemCount: notes.length,
+                          itemBuilder: (context, index) => NoteCard(
+                            note: notes[index],
+                          ),
+                        );
                       }
                       return Container();
                     },
@@ -55,14 +68,12 @@ class App extends StatelessWidget {
                             NoteUpdated(
                               Note(
                                   title: 'Similarity',
-                                  body: '''
-                                      Elements that share similar properties are perceived as more related.
-                                      Any number of characteristics can be similar: colour, shape, size, texture, etc.
-                                      ''',
+                                  body:
+                                      '''Elements that share similar properties are perceived as more related.\n\nAny number of characteristics can be similar: colour, shape, size, texture, etc.''',
                                   id: '1',
                                   dateTime: DateTime.now(),
                                   tags: const [
-                                    Tag(title: 'Test tag2'),
+                                    Tag(title: 'Design'),
                                   ],
                                   tasks: const [
                                     Task(body: 'Test task', isCompleted: true),
@@ -75,46 +86,6 @@ class App extends StatelessWidget {
                 ),
               ],
             ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class NoteCard extends StatelessWidget {
-  const NoteCard({Key? key, required this.note}) : super(key: key);
-
-  final Note note;
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(15),
-        child: Container(
-          width: MediaQuery.of(context).size.width * 0.5,
-          color: const Color(0xFF171C26),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            textDirection: TextDirection.ltr,
-            children: [
-              Text(
-                note.title,
-                style: Themes.noteCardTitle,
-              ),
-              Text(
-                note.body,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  if (note.tags != null)
-                    ...note.tags!.map((e) => Text(e.title)).toList(),
-                  Text('${note.dateTime.day}'),
-                ],
-              ),
-            ],
           ),
         ),
       ),
