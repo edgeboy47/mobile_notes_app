@@ -76,15 +76,14 @@ class NoteForm extends StatelessWidget {
 
     return Form(
       child: ListView(
-        // crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           TextFormField(
             controller: titleController,
-            // initialValue: note.title,
             maxLines: null,
-            // expands: true,
             decoration: const InputDecoration(
-                hintText: 'Title', border: InputBorder.none),
+              hintText: 'Title',
+              border: InputBorder.none,
+            ),
             style: Themes.notePageHeader,
           ),
           BlocBuilder<NotesBloc, NotesState>(
@@ -97,16 +96,16 @@ class NoteForm extends StatelessWidget {
               }
               return Text(
                 'Updated ${formattedDate(thisNote)}',
-                // style: Themes.noteCardBody.copyWith(fontSize: 16),
               );
             },
           ),
           TextFormField(
             controller: bodyController,
-            // initialValue: note.body,
             maxLines: null,
-            // expands: true,
-            decoration: const InputDecoration(border: InputBorder.none),
+            decoration: const InputDecoration(
+              hintText: 'Note',
+              border: InputBorder.none,
+            ),
           ),
         ],
       ),

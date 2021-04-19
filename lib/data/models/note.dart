@@ -36,6 +36,9 @@ class Note extends Equatable {
   @HiveField(5)
   final List<Task>? tasks;
 
+///TODO:
+/// Remove datetime from props so note does not update when only the date change
+ 
   @override
   List<Object?> get props => [
         body,
