@@ -4,6 +4,7 @@ import 'package:mobile_notes_app/data/models/note.dart';
 import 'package:mobile_notes_app/notes/bloc/notes_bloc.dart';
 import 'package:mobile_notes_app/ui/themes.dart';
 import 'package:mobile_notes_app/utils.dart';
+import 'package:uuid/uuid.dart';
 
 class NotePage extends StatefulWidget {
   const NotePage({Key? key, required this.note}) : super(key: key);
@@ -48,11 +49,90 @@ class _NotePageState extends State<NotePage> {
                     bodyController: bodyController,
                   ),
                 ),
+                BottomToolbar(note: widget.note)
               ],
             ),
           ),
         ),
       ),
+    );
+  }
+}
+
+class BottomToolbar extends StatelessWidget {
+  const BottomToolbar({
+    Key? key,
+    required this.note,
+  }) : super(key: key);
+
+  final Note note;
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        IconButton(
+          icon: const Icon(Icons.more_horiz),
+          onPressed: () {},
+        ),
+        IconButton(
+          icon: const Icon(Icons.more_horiz),
+          onPressed: () {
+            showModalBottomSheet(
+              backgroundColor: Themes.darkBackgroundColor,
+              elevation: 5,
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+              ),
+              context: context,
+              builder: (context) {
+                return SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      ListTile(
+                        leading: const Icon(Icons.delete),
+                        title: const Text('Delete note'),
+                        onTap: () {
+                          Navigator.pop(context);
+                          Navigator.pop(context);
+                          context.read<NotesBloc>().add(NoteDeleted(note.id!));
+                        },
+                      ),
+                      ListTile(
+                        leading: const Icon(Icons.copy),
+                        title: const Text('Make a copy'),
+                        onTap: () {
+                          Navigator.pop(context);
+                          Navigator.pop(context);
+                          context.read<NotesBloc>().add(
+                                NoteAdded(
+                                  note.copyWith(
+                                    dateTime: DateTime.now(),
+                                    id: const Uuid().v1(),
+                                  ),
+                                ),
+                              );
+                        },
+                      ),
+                      ListTile(
+                        leading: const Icon(Icons.share),
+                        title: const Text('Share'),
+                        onTap: () {},
+                      ),
+                      ListTile(
+                        leading: const Icon(Icons.label),
+                        title: const Text('Labels'),
+                        onTap: () {},
+                      ),
+                    ],
+                  ),
+                );
+              },
+            );
+          },
+        ),
+      ],
     );
   }
 }
@@ -90,12 +170,14 @@ class NoteForm extends StatelessWidget {
             builder: (context, state) {
               var thisNote = note;
               if (state is NotesLoadSuccess) {
-                thisNote = state.notes
-                    .where((element) => element.id == note.id)
-                    .single;
+                var filteredList =
+                    state.notes.where((element) => element.id == note.id);
+                if (filteredList.isEmpty == false)
+                  thisNote = filteredList.single;
               }
               return Text(
                 'Updated ${formattedDate(thisNote)}',
+                // style: Themes.noteCardBody.copyWith(fontSize: 16),
               );
             },
           ),

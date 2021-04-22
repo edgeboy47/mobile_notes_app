@@ -2,21 +2,21 @@ import 'package:equatable/equatable.dart';
 import 'package:hive/hive.dart';
 import 'package:mobile_notes_app/data/models/tag.dart';
 import 'package:mobile_notes_app/data/models/task.dart';
+import 'package:uuid/uuid.dart';
 part 'note.g.dart';
 
 // TODO: Implement HiveList for other fields and regenerate build_runner file
-// TODO: generate note uuid on instantiation
 
 @HiveType(typeId: 0)
 class Note extends Equatable {
-  const Note({
+  Note({
     required this.body,
     required this.title,
     required this.dateTime,
-    required this.id,
+    String? id,
     this.tags,
     this.tasks,
-  });
+  }) : id = id ?? const Uuid().v1();
 
   @HiveField(0)
   final String title;
@@ -28,7 +28,7 @@ class Note extends Equatable {
   final DateTime dateTime;
 
   @HiveField(3)
-  final String id;
+  final String? id;
 
   @HiveField(4)
   final List<Tag>? tags;
@@ -36,14 +36,10 @@ class Note extends Equatable {
   @HiveField(5)
   final List<Task>? tasks;
 
-///TODO:
-/// Remove datetime from props so note does not update when only the date change
- 
   @override
   List<Object?> get props => [
         body,
         title,
-        dateTime,
         id,
         tags,
         tasks,

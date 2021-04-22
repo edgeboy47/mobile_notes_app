@@ -20,7 +20,7 @@ class NoteAdapter extends TypeAdapter<Note> {
       body: fields[1] as String,
       title: fields[0] as String,
       dateTime: fields[2] as DateTime,
-      id: fields[3] as String,
+      id: fields[3] as String?,
       tags: (fields[4] as List?)?.cast<Tag>(),
       tasks: (fields[5] as List?)?.cast<Task>(),
     );
