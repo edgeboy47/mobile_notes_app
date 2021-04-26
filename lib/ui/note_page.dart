@@ -6,26 +6,10 @@ import 'package:mobile_notes_app/ui/themes.dart';
 import 'package:mobile_notes_app/utils.dart';
 import 'package:uuid/uuid.dart';
 
-class NotePage extends StatefulWidget {
+class NotePage extends StatelessWidget {
   const NotePage({Key? key, required this.note}) : super(key: key);
 
   final Note note;
-
-  @override
-  _NotePageState createState() => _NotePageState();
-}
-
-class _NotePageState extends State<NotePage> {
-  final TextEditingController titleController = TextEditingController();
-  final TextEditingController bodyController = TextEditingController();
-
-  @override
-  void dispose() {
-    titleController.dispose();
-    bodyController.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -34,23 +18,21 @@ class _NotePageState extends State<NotePage> {
           color: Themes.noteColours['blue'],
           child: Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Toolbar(
-                  note: widget.note,
-                  titleController: titleController,
-                  bodyController: bodyController,
-                ),
-                Expanded(
-                  child: NoteForm(
-                    note: widget.note,
-                    titleController: titleController,
-                    bodyController: bodyController,
+            child: Form(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Toolbar(
+                    note: note,
                   ),
-                ),
-                BottomToolbar(note: widget.note)
-              ],
+                  Expanded(
+                    child: NoteForm(
+                      note: note,
+                    ),
+                  ),
+                  BottomToolbar(note: note)
+                ],
+              ),
             ),
           ),
         ),
@@ -72,8 +54,61 @@ class BottomToolbar extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         IconButton(
-          icon: const Icon(Icons.more_horiz),
-          onPressed: () {},
+          icon: const Icon(Icons.add_box_outlined),
+          onPressed: () {
+            showModalBottomSheet(
+              backgroundColor: Themes.darkBackgroundColor,
+              elevation: 5,
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+              ),
+              context: context,
+              builder: (context) {
+                return SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      ListTile(
+                        leading: const Icon(Icons.add_a_photo_outlined),
+                        title: const Text('Take photo'),
+                        onTap: () {
+                          //TODO: Implement adding photo to current note
+                        },
+                      ),
+                      ListTile(
+                        leading: const Icon(Icons.photo),
+                        title: const Text('Add photo'),
+                        onTap: () {
+                          //TODO: Implement addding photo from gallery
+                        },
+                      ),
+                      ListTile(
+                        leading: const Icon(Icons.brush_outlined),
+                        title: const Text('Drawing'),
+                        onTap: () {
+                          //TODO: Implement adding drawing
+                        },
+                      ),
+                      ListTile(
+                        leading: const Icon(Icons.mic_none_outlined),
+                        title: const Text('Recording'),
+                        onTap: () {
+                          // TODO: Implement adding recording feature
+                        },
+                      ),
+                      ListTile(
+                        leading: const Icon(Icons.check_box_outlined),
+                        title: const Text('Checkboxes'),
+                        onTap: () {
+                          //TODO: Implement adding checkboxes
+                        },
+                      )
+                    ],
+                  ),
+                );
+              },
+            );
+          },
         ),
         IconButton(
           icon: const Icon(Icons.more_horiz),
@@ -118,12 +153,16 @@ class BottomToolbar extends StatelessWidget {
                       ListTile(
                         leading: const Icon(Icons.share),
                         title: const Text('Share'),
-                        onTap: () {},
+                        onTap: () {
+                          //TODO: Implement share feature
+                        },
                       ),
                       ListTile(
                         leading: const Icon(Icons.label),
                         title: const Text('Labels'),
-                        onTap: () {},
+                        onTap: () {
+                          // TODO: Implement tags feature
+                        },
                       ),
                     ],
                   ),
@@ -141,56 +180,115 @@ class NoteForm extends StatelessWidget {
   const NoteForm({
     Key? key,
     required this.note,
-    required this.titleController,
-    required this.bodyController,
   }) : super(key: key);
 
   final Note note;
-  final TextEditingController titleController;
-  final TextEditingController bodyController;
 
   @override
   Widget build(BuildContext context) {
-    titleController.text = note.title;
-    bodyController.text = note.body;
+    var newNote = note;
 
-    return Form(
-      child: ListView(
-        children: [
-          TextFormField(
-            controller: titleController,
-            maxLines: null,
-            decoration: const InputDecoration(
-              hintText: 'Title',
-              border: InputBorder.none,
-            ),
-            style: Themes.notePageHeader,
-          ),
-          BlocBuilder<NotesBloc, NotesState>(
-            builder: (context, state) {
-              var thisNote = note;
-              if (state is NotesLoadSuccess) {
-                var filteredList =
-                    state.notes.where((element) => element.id == note.id);
-                if (filteredList.isEmpty == false)
-                  thisNote = filteredList.single;
-              }
-              return Text(
-                'Updated ${formattedDate(thisNote)}',
-                // style: Themes.noteCardBody.copyWith(fontSize: 16),
+    return ListView(
+      children: [
+        TextFormField(
+          initialValue: note.title,
+          maxLines: null,
+          style: Themes.notePageHeader,
+          onSaved: (String? val) {
+            if (val != null && val != newNote.title) {
+              newNote = newNote.copyWith(
+                title: val,
+                dateTime: DateTime.now(),
               );
-            },
+              context.read<NotesBloc>().add(NoteUpdated(newNote));
+            }
+          },
+          decoration: const InputDecoration(
+            hintText: 'Title',
+            border: InputBorder.none,
           ),
-          TextFormField(
-            controller: bodyController,
-            maxLines: null,
-            decoration: const InputDecoration(
-              hintText: 'Note',
-              border: InputBorder.none,
-            ),
-          ),
-        ],
-      ),
+        ),
+        BlocBuilder<NotesBloc, NotesState>(
+          builder: (context, state) {
+            var thisNote = note;
+            if (state is NotesLoadSuccess) {
+              var filteredList =
+                  state.notes.where((element) => element.id == note.id);
+              if (filteredList.isEmpty == false) thisNote = filteredList.single;
+            }
+            return Text(
+              'Updated ${formattedDate(thisNote)}',
+              // style: Themes.noteCardBody.copyWith(fontSize: 16),
+            );
+          },
+        ),
+        note.tasks == null
+            ? TextFormField(
+                initialValue: note.body,
+                onSaved: (String? val) {
+                  if (val != null && val != newNote.body) {
+                    newNote = newNote.copyWith(
+                      body: val,
+                      dateTime: DateTime.now(),
+                    );
+                    context.read<NotesBloc>().add(NoteUpdated(newNote));
+                  }
+                },
+                maxLines: null,
+                decoration: const InputDecoration(
+                  hintText: 'Note',
+                  border: InputBorder.none,
+                ),
+              )
+              //TODO: Create UI for checklist
+            : Container(
+                child: Column(
+                  children: [
+                    ...note.tasks!
+                        .map((el) => Row(
+                              children: [
+                                const Icon(Icons.drag_indicator),
+                                Checkbox(
+                                  value: el.isCompleted,
+                                  onChanged: null,
+                                ),
+                                Flexible(
+                                  child: TextFormField(
+                                    initialValue: el.body,
+                                    decoration: const InputDecoration(
+                                      border: InputBorder.none,
+                                    ),
+                                  ),
+                                ),
+                                const Icon(Icons.close)
+                              ],
+                            ))
+                        .toList(),
+                    ...note.tasks!.map(
+                      (el) => ListTile(
+                        leading: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(Icons.drag_indicator),
+                            Checkbox(
+                              value: el.isCompleted,
+                              onChanged: null,
+                            ),
+                          ],
+                        ),
+                        title: TextFormField(
+                          initialValue: el.body,
+                          decoration: const InputDecoration(
+                            border: InputBorder.none,
+                          ),
+                        ),
+                        trailing: const Icon(Icons.close),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+      ],
     );
   }
 }
@@ -199,13 +297,9 @@ class Toolbar extends StatelessWidget {
   const Toolbar({
     Key? key,
     required this.note,
-    required this.titleController,
-    required this.bodyController,
   }) : super(key: key);
 
   final Note note;
-  final TextEditingController titleController;
-  final TextEditingController bodyController;
 
   @override
   Widget build(BuildContext context) {
@@ -226,20 +320,7 @@ class Toolbar extends StatelessWidget {
         const Icon(Icons.redo),
         IconButton(
           icon: const Icon(Icons.check),
-          onPressed: () {
-            final titleText = titleController.text;
-            final bodyText = bodyController.text;
-
-            context.read<NotesBloc>().add(
-                  NoteUpdated(
-                    note.copyWith(
-                      title: titleText,
-                      body: bodyText,
-                      dateTime: DateTime.now(),
-                    ),
-                  ),
-                );
-          },
+          onPressed: () => Form.of(context)!.save(),
         ),
       ],
     );

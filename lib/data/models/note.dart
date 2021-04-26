@@ -45,6 +45,22 @@ class Note extends Equatable {
         tasks,
       ];
 
+  void addTask(Task task) {
+    tasks?.add(task);
+  }
+
+  void updateTask(Task task, Task newTask) {
+    if (tasks != null) {
+      final index = tasks!.indexOf(task);
+
+      tasks!.replaceRange(index, index + 1, [newTask]);
+    }
+  }
+
+  void deleteTask(Task task) {
+    tasks?.removeWhere((element) => element == task);
+  }
+
   Note copyWith({
     String? body,
     String? title,

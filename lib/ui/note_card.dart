@@ -34,18 +34,24 @@ class NoteCard extends StatelessWidget {
               children: [
                 Padding(
                   padding: const EdgeInsets.only(bottom: 16),
-                  child: Text(
-                    note.title,
-                    style: Themes.noteCardTitle,
-                  ),
+                  child: note.title.isNotEmpty
+                      ? Text(
+                          note.title,
+                          maxLines: 2,
+                          overflow: TextOverflow.clip,
+                          style: Themes.noteCardTitle,
+                        )
+                      : Container(),
                 ),
                 Flexible(
-                  child: Text(
-                    note.body,
-                    maxLines: 13,
-                    overflow: TextOverflow.ellipsis,
-                    style: Themes.noteCardBody,
-                  ),
+                  child: note.body.isNotEmpty
+                      ? Text(
+                          note.body,
+                          maxLines: 10,
+                          overflow: TextOverflow.ellipsis,
+                          style: Themes.noteCardBody,
+                        )
+                      : Container(),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,

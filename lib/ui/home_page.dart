@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:mobile_notes_app/data/models/note.dart';
+import 'package:mobile_notes_app/data/models/task.dart';
 import 'package:mobile_notes_app/notes/bloc/notes_bloc.dart';
 import 'package:mobile_notes_app/ui/note_card.dart';
 import 'package:mobile_notes_app/ui/note_page.dart';
@@ -82,8 +83,7 @@ class NoteGrid extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<NotesBloc, NotesState>(
       builder: (context, state) {
-        if (state is NotesLoading)
-          return const CircularProgressIndicator();
+        if (state is NotesLoading) return const CircularProgressIndicator();
         if (state is NotesLoadSuccess) {
           var notes = state.notes;
           if (notes.isEmpty)
@@ -122,11 +122,20 @@ class SearchBar extends StatelessWidget {
         color: Themes.darkBackgroundColor,
         child: Row(
           children: [
-            const Icon(Icons.sort),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: IconButton(
+                icon: const Icon(Icons.sort),
+                onPressed: () {
+                  //TODO: Implement filtering feature
+                },
+              ),
+            ),
             Flexible(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: TextFormField(
+                  //TODO: Implement search feature
                   maxLines: 1,
                   decoration: const InputDecoration(
                     border: InputBorder.none,
@@ -135,7 +144,15 @@ class SearchBar extends StatelessWidget {
                 ),
               ),
             ),
-            Icon(Icons.stacked_bar_chart)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: IconButton(
+                icon: const Icon(Icons.view_agenda_outlined),
+                onPressed: () {
+                  //TODO: Implement table/grid view switch feature
+                },
+              ),
+            )
           ],
         ),
       ),
@@ -159,22 +176,59 @@ class BottomNavBar extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 20.0),
           child: Row(
-            children: const [
+            children: [
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16),
-                child: Icon(Icons.check_circle_outline),
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: IconButton(
+                  icon: const Icon(Icons.check_circle_outline),
+                  onPressed: () {
+                    //TODO: Implement creating checklist feature
+                    final newNote = Note(
+                      body: '',
+                      title: '',
+                      dateTime: DateTime.now(),
+                      tasks: const [Task(body: '', isCompleted: false)],
+                    );
+
+                    context.read<NotesBloc>().add(NoteAdded(newNote));
+
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => NotePage(
+                          note: newNote,
+                        ),
+                      ),
+                    );
+                  },
+                ),
               ),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16),
-                child: Icon(Icons.mic_outlined),
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: IconButton(
+                  icon: const Icon(Icons.mic_outlined),
+                  onPressed: () {
+                    //TODO: Implement voice recording feature
+                  },
+                ),
               ),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16),
-                child: Icon(Icons.camera_alt_outlined),
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: IconButton(
+                  icon: const Icon(Icons.camera_alt_outlined),
+                  onPressed: () {
+                    //TODO: Implement camera/gallery feature
+                  },
+                ),
               ),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16),
-                child: Icon(Icons.format_paint),
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: IconButton(
+                  icon: const Icon(Icons.brush_outlined),
+                  onPressed: () {
+                    //TODO: Implement drawing feature
+                  },
+                ),
               ),
             ],
           ),

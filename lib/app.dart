@@ -15,6 +15,7 @@ class App extends StatelessWidget {
       create: (context) => NotesBloc(
         repository: HiveDatabase(
           notesBox: Hive.box('notesBox'),
+          tagsBox: Hive.box('tagsBox'),
         ),
       ),
       child: MaterialApp(
