@@ -21,10 +21,11 @@ class NoteCard extends StatelessWidget {
             ),
           );
         },
+        //TODO: Add hero animation onpress
         child: ClipRRect(
           borderRadius: BorderRadius.circular(15),
           child: Container(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(12),
             width: MediaQuery.of(context).size.width * 0.5,
             color: Themes.darkBackgroundColor,
             child: Column(
@@ -50,6 +51,35 @@ class NoteCard extends StatelessWidget {
                           maxLines: 10,
                           overflow: TextOverflow.ellipsis,
                           style: Themes.noteCardBody,
+                        )
+                      : Container(),
+                ),
+                Flexible(
+                  child: (note.tasks != null && note.tasks!.isNotEmpty)
+                      ? ListView.builder(
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: note.tasks!.length,
+                          shrinkWrap: true,
+                          itemBuilder: (context, index) {
+                            if (index > 12) return Container();
+                            if (index == 12) return const Text('...');
+                            return Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Checkbox(
+                                  value: note.tasks![index].isCompleted,
+                                  onChanged: null,
+                                ),
+                                Flexible(
+                                  child: Text(
+                                    note.tasks![index].body,
+                                    maxLines: 3,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
                         )
                       : Container(),
                 ),

@@ -92,38 +92,47 @@ class HiveDatabase implements DataSource {
     );
   }
 
-  Future<void> addTasks(String noteId, List<Task> tasks) async {
-    for (final task in tasks) await addTask(noteId, task);
+  Future<void> addTasks(String id, List<Task> tasks) async {
+    for (final task in tasks) await addTask(id, task);
   }
 
   @override
-  Future<void> deleteTask(String noteId, Task task) async {
+  Future<void> deleteTask(String id, Task task) async {
     if (notesBox.isOpen == false) await _init();
 
-    final note = notesBox.get(noteId);
-    final tasks = note?.tasks;
+    final note = notesBox.get(id);
+    final tasks = note?.tasks?.toList();
 
     if (tasks == null) return;
 
-    tasks.remove(task);
+    if (tasks.contains(task))
+      tasks.remove(task);
+    else
+      tasks.remove(const Task(body: '', isCompleted: false));
 
     await updateNote(
-      note!.copyWith(
-        tasks: tasks,
-        dateTime: DateTime.now(),
-      ),
-      noteId,
+      note!.copyWith(tasks: tasks, dateTime: DateTime.now()),
+      id,
     );
   }
 
   //TODO: Implement update task
   @override
-  Future<void> updateTask(String noteId, Task task) async {
+  Future<void> updateTask(String id, Task oldTask, Task newTask) async {
     if (notesBox.isOpen == false) await _init();
 
-    final note = notesBox.get(noteId);
-    final tasks = note?.tasks;
+    final note = notesBox.get(id);
+    final tasks = note?.tasks?.toList();
 
     if (tasks == null) return;
+
+    final index = tasks.indexOf(oldTask);
+
+    tasks.replaceRange(index, index + 1, [newTask]);
+
+    await updateNote(
+      note!.copyWith(tasks: tasks, dateTime: DateTime.now()),
+      id,
+    );
   }
 }

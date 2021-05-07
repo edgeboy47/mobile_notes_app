@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:html';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:mobile_notes_app/data/data_sources/data_source.dart';
@@ -38,17 +37,17 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
     }
 
     if (event is NoteTaskAdded) {
-      await repository.addTask(event.noteId, event.task);
+      await repository.addTask(event.id, event.task);
       add(NotesLoaded());
     }
 
     if (event is NoteTaskUpdated) {
-      await repository.updateTask(event.noteId, event.task);
+      await repository.updateTask(event.id, event.oldTask, event.newTask);
       add(NotesLoaded());
     }
 
     if (event is NoteTaskDeleted) {
-      await repository.deleteTask(event.noteId, event.task);
+      await repository.deleteTask(event.id, event.task);
       add(NotesLoaded());
     }
   }

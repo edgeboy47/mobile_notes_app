@@ -68,6 +68,7 @@ class Note extends Equatable {
     String? id,
     List<Tag>? tags,
     List<Task>? tasks,
+    bool? setTasksNull,
   }) {
     return Note(
       body: body ?? this.body,
@@ -75,7 +76,9 @@ class Note extends Equatable {
       dateTime: dateTime ?? this.dateTime,
       id: id ?? this.id,
       tags: tags ?? this.tags,
-      tasks: tasks ?? this.tasks,
+      // Allow tasks to be explicitly set to null
+      tasks:
+          (setTasksNull != null && setTasksNull) ? null : (tasks ?? this.tasks),
     );
   }
 }

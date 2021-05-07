@@ -34,31 +34,36 @@ class NoteDeleted extends NotesEvent {
 }
 
 class NoteTaskAdded extends NotesEvent {
-  NoteTaskAdded(this.noteId, this.task);
+  NoteTaskAdded(this.id, this.task);
 
   final Task task;
-  final String noteId;
+  final String id;
 
   @override
-  List<Object> get props => [task];
+  List<Object> get props => [id, task];
 }
 
 class NoteTaskDeleted extends NotesEvent {
-  NoteTaskDeleted(this.noteId, this.task);
+  NoteTaskDeleted(this.id, this.task);
 
   final Task task;
-  final String noteId;
+  final String id;
 
   @override
-  List<Object> get props => [task];
+  List<Object> get props => [id, task];
 }
 
 class NoteTaskUpdated extends NotesEvent {
-  NoteTaskUpdated(this.noteId, this.task);
+  NoteTaskUpdated({
+    required this.id,
+    required this.oldTask,
+    required this.newTask,
+  });
 
-  final Task task;
-  final String noteId;
+  final Task oldTask;
+  final Task newTask;
+  final String id;
 
   @override
-  List<Object> get props => [task];
+  List<Object> get props => [id, oldTask, newTask];
 }

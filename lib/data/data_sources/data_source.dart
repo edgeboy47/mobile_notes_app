@@ -26,5 +26,5 @@ abstract class DataSource {
 
   Future<void> deleteTask(String noteId, Task task);
 
-  Future<void> updateTask(String noteId, Task task);
+  Future<void> updateTask(String noteId, Task oldTask, Task newTask);
 }

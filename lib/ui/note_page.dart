@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile_notes_app/data/models/note.dart';
+import 'package:mobile_notes_app/data/models/task.dart';
 import 'package:mobile_notes_app/notes/bloc/notes_bloc.dart';
+import 'package:mobile_notes_app/ui/note_form.dart';
 import 'package:mobile_notes_app/ui/themes.dart';
-import 'package:mobile_notes_app/utils.dart';
 import 'package:uuid/uuid.dart';
 
 class NotePage extends StatelessWidget {
@@ -96,13 +97,73 @@ class BottomToolbar extends StatelessWidget {
                           // TODO: Implement adding recording feature
                         },
                       ),
-                      ListTile(
-                        leading: const Icon(Icons.check_box_outlined),
-                        title: const Text('Checkboxes'),
-                        onTap: () {
-                          //TODO: Implement adding checkboxes
+                      BlocBuilder<NotesBloc, NotesState>(
+                        builder: (context, state) {
+                          var thisNote = note;
+                          List<Task> noteTasks;
+
+                          if (state is NotesLoadSuccess) {
+                            var filteredList = state.notes
+                                .where((element) => element.id == note.id);
+                            if (filteredList.isNotEmpty)
+                              thisNote = filteredList.single;
+                          }
+
+                          return thisNote.tasks == null
+                              ? ListTile(
+                                  leading: const Icon(Icons.check_box_outlined),
+                                  title: const Text('Checkboxes'),
+                                  onTap: () {
+                                    if (thisNote.body == '')
+                                      noteTasks = [
+                                        const Task(body: '', isCompleted: false)
+                                      ];
+                                    else
+                                      noteTasks = thisNote.body
+                                          .split('\n')
+                                          .where((s) => s.isNotEmpty)
+                                          .map((s) => Task(
+                                              body: s.trim(),
+                                              isCompleted: false))
+                                          .toList();
+
+                                    context.read<NotesBloc>().add(
+                                          NoteUpdated(
+                                            thisNote.copyWith(
+                                              body: '',
+                                              dateTime: DateTime.now(),
+                                              tasks: noteTasks,
+                                            ),
+                                          ),
+                                        );
+                                    Navigator.pop(context);
+                                  },
+                                )
+                              : ListTile(
+                                  leading:
+                                      const Icon(Icons.description_outlined),
+                                  title: const Text('Paragraph'),
+                                  onTap: () {
+                                    final noteBody = thisNote.tasks!
+                                        .map((e) => e.body)
+                                        .join('\n');
+
+                                    context.read<NotesBloc>().add(
+                                          NoteUpdated(
+                                            thisNote.copyWith(
+                                              body: noteBody,
+                                              dateTime: DateTime.now(),
+                                              setTasksNull: true,
+                                              tasks: null,
+                                            ),
+                                          ),
+                                        );
+
+                                    Navigator.pop(context);
+                                  },
+                                );
                         },
-                      )
+                      ),
                     ],
                   ),
                 );
@@ -171,123 +232,6 @@ class BottomToolbar extends StatelessWidget {
             );
           },
         ),
-      ],
-    );
-  }
-}
-
-class NoteForm extends StatelessWidget {
-  const NoteForm({
-    Key? key,
-    required this.note,
-  }) : super(key: key);
-
-  final Note note;
-
-  @override
-  Widget build(BuildContext context) {
-    var newNote = note;
-
-    return ListView(
-      children: [
-        TextFormField(
-          initialValue: note.title,
-          maxLines: null,
-          style: Themes.notePageHeader,
-          onSaved: (String? val) {
-            if (val != null && val != newNote.title) {
-              newNote = newNote.copyWith(
-                title: val,
-                dateTime: DateTime.now(),
-              );
-              context.read<NotesBloc>().add(NoteUpdated(newNote));
-            }
-          },
-          decoration: const InputDecoration(
-            hintText: 'Title',
-            border: InputBorder.none,
-          ),
-        ),
-        BlocBuilder<NotesBloc, NotesState>(
-          builder: (context, state) {
-            var thisNote = note;
-            if (state is NotesLoadSuccess) {
-              var filteredList =
-                  state.notes.where((element) => element.id == note.id);
-              if (filteredList.isEmpty == false) thisNote = filteredList.single;
-            }
-            return Text(
-              'Updated ${formattedDate(thisNote)}',
-              // style: Themes.noteCardBody.copyWith(fontSize: 16),
-            );
-          },
-        ),
-        note.tasks == null
-            ? TextFormField(
-                initialValue: note.body,
-                onSaved: (String? val) {
-                  if (val != null && val != newNote.body) {
-                    newNote = newNote.copyWith(
-                      body: val,
-                      dateTime: DateTime.now(),
-                    );
-                    context.read<NotesBloc>().add(NoteUpdated(newNote));
-                  }
-                },
-                maxLines: null,
-                decoration: const InputDecoration(
-                  hintText: 'Note',
-                  border: InputBorder.none,
-                ),
-              )
-              //TODO: Create UI for checklist
-            : Container(
-                child: Column(
-                  children: [
-                    ...note.tasks!
-                        .map((el) => Row(
-                              children: [
-                                const Icon(Icons.drag_indicator),
-                                Checkbox(
-                                  value: el.isCompleted,
-                                  onChanged: null,
-                                ),
-                                Flexible(
-                                  child: TextFormField(
-                                    initialValue: el.body,
-                                    decoration: const InputDecoration(
-                                      border: InputBorder.none,
-                                    ),
-                                  ),
-                                ),
-                                const Icon(Icons.close)
-                              ],
-                            ))
-                        .toList(),
-                    ...note.tasks!.map(
-                      (el) => ListTile(
-                        leading: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const Icon(Icons.drag_indicator),
-                            Checkbox(
-                              value: el.isCompleted,
-                              onChanged: null,
-                            ),
-                          ],
-                        ),
-                        title: TextFormField(
-                          initialValue: el.body,
-                          decoration: const InputDecoration(
-                            border: InputBorder.none,
-                          ),
-                        ),
-                        trailing: const Icon(Icons.close),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
       ],
     );
   }

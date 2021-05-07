@@ -9,10 +9,17 @@ class Task extends Equatable {
 
   @HiveField(0)
   final String body;
-  
+
   @HiveField(1)
   final bool isCompleted;
 
   @override
   List<Object?> get props => [body, isCompleted];
+
+  Task copyWith({String? body, bool? isCompleted}) {
+    return Task(
+      body: body ?? this.body,
+      isCompleted: isCompleted ?? this.isCompleted,
+    );
+  }
 }

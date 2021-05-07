@@ -182,7 +182,6 @@ class BottomNavBar extends StatelessWidget {
                 child: IconButton(
                   icon: const Icon(Icons.check_circle_outline),
                   onPressed: () {
-                    //TODO: Implement creating checklist feature
                     final newNote = Note(
                       body: '',
                       title: '',
