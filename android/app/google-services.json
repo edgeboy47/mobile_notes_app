@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "593136776507",
+    "project_id": "todoist-clone-7c02f",
+    "storage_bucket": "todoist-clone-7c02f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:593136776507:android:69e5ac8f27f6950966b31e",
+        "android_client_info": {
+          "package_name": "com.example.mobile_notes_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "593136776507-d5dp3kq4dvk77r6g58kmtv47c4v4om4i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA4YOsmi3aqw6SLMEhhFkxhw3DUSrJjZEw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "593136776507-d5dp3kq4dvk77r6g58kmtv47c4v4om4i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
