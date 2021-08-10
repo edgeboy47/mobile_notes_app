@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:hive/hive.dart';
-import 'package:mobile_notes_app/data/models/tag.dart';
-import 'package:mobile_notes_app/data/models/task.dart';
+import 'package:mobile_notes_app/notes/data/models/tag.dart';
+import 'package:mobile_notes_app/notes/data/models/task.dart';
 import 'package:uuid/uuid.dart';
 part 'note.g.dart';
 

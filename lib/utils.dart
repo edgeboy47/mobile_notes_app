@@ -1,4 +1,4 @@
-import 'package:mobile_notes_app/data/models/note.dart';
+import 'package:mobile_notes_app/notes/data/models/note.dart';
 
 String formattedDate(Note note) {
     final dt = note.dateTime;

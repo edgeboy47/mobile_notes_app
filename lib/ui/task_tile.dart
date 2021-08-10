@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_notes_app/data/models/task.dart';
-import 'package:mobile_notes_app/notes/bloc/notes_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mobile_notes_app/notes/application/bloc/notes_bloc.dart';
+import 'package:mobile_notes_app/notes/data/models/task.dart';
 
 class TaskTile extends FormField<Task> {
   TaskTile({

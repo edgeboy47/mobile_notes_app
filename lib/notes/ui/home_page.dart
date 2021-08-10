@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:mobile_notes_app/data/models/note.dart';
-import 'package:mobile_notes_app/data/models/task.dart';
-import 'package:mobile_notes_app/notes/bloc/notes_bloc.dart';
-import 'package:mobile_notes_app/ui/note_card.dart';
-import 'package:mobile_notes_app/ui/note_page.dart';
+import 'package:mobile_notes_app/notes/application/bloc/notes_bloc.dart';
+import 'package:mobile_notes_app/notes/data/models/note.dart';
+import 'package:mobile_notes_app/notes/data/models/task.dart';
+import 'package:mobile_notes_app/notes/ui/note_card.dart';
+import 'package:mobile_notes_app/notes/ui/note_page.dart';
 import 'package:mobile_notes_app/ui/themes.dart';
 
 class HomePage extends StatelessWidget {

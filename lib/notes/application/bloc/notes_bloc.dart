@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:mobile_notes_app/data/data_sources/data_source.dart';
-import 'package:mobile_notes_app/data/models/note.dart';
-import 'package:mobile_notes_app/data/models/task.dart';
+import 'package:mobile_notes_app/notes/data/data_sources/data_source.dart';
+import 'package:mobile_notes_app/notes/data/models/note.dart';
+import 'package:mobile_notes_app/notes/data/models/task.dart';
 part 'notes_event.dart';
 part 'notes_state.dart';
 

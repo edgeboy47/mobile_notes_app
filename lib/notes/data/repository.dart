@@ -1,5 +1,5 @@
-import 'package:mobile_notes_app/data/data_sources/data_source.dart';
-import 'package:mobile_notes_app/data/models/note.dart';
+import 'package:mobile_notes_app/notes/data/data_sources/data_source.dart';
+import 'package:mobile_notes_app/notes/data/models/note.dart';
 
 abstract class Repository {
   const Repository({required this.dataSource});

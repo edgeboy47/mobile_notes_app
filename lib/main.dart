@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:mobile_notes_app/app.dart';
-import 'package:mobile_notes_app/data/models/note.dart';
-import 'package:mobile_notes_app/data/models/tag.dart';
-import 'package:mobile_notes_app/data/models/task.dart';
+import 'package:mobile_notes_app/notes/data/models/note.dart';
+import 'package:mobile_notes_app/notes/data/models/tag.dart';
+import 'package:mobile_notes_app/notes/data/models/task.dart';
 
 
 void main() async {

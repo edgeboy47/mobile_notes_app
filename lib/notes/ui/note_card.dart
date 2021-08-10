@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_notes_app/data/models/note.dart';
-import 'package:mobile_notes_app/data/models/tag.dart';
-import 'package:mobile_notes_app/ui/note_page.dart';
+import 'package:mobile_notes_app/notes/data/models/note.dart';
+import 'package:mobile_notes_app/notes/data/models/tag.dart';
+import 'package:mobile_notes_app/notes/ui/note_page.dart';
 import 'package:mobile_notes_app/ui/themes.dart';
 import 'package:mobile_notes_app/utils.dart';
 
