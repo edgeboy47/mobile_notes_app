@@ -9,14 +9,19 @@ part 'auth_cubit.freezed.dart';
 class AuthState with _$AuthState {
   const AuthState._();
   const factory AuthState.unknown() = _Unknown;
-  const factory AuthState.authenticated() = _Unauthenticated;
-  const factory AuthState.unauthenticated() = _Authenticated;
+  const factory AuthState.authenticated() = _Authenticated;
+  const factory AuthState.unauthenticated() = _Unauthenticated;
   const factory AuthState.failure() = _Failure;
 }
 
 class AuthCubit extends Cubit<AuthState> {
-  AuthCubit(this._authenticator) : super(const AuthState.unknown());
+  AuthCubit(this._authenticator) : super(const AuthState.unauthenticated());
   final Authenticator _authenticator;
+
+  //TODO: Remove after setting up repo to sync with online storage
+  void freeSignIn() {
+    emit(const AuthState.authenticated());
+  }
 
   Future<void> signOut() async {
     await _authenticator.signOut();

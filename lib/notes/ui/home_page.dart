@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:mobile_notes_app/auth/application/cubit/auth_cubit.dart';
 import 'package:mobile_notes_app/notes/application/bloc/notes_bloc.dart';
 import 'package:mobile_notes_app/notes/data/models/note.dart';
 import 'package:mobile_notes_app/notes/data/models/task.dart';
@@ -39,6 +40,14 @@ class HomePage extends StatelessWidget {
             'Notes',
             style: Themes.noteCardTitle.copyWith(fontSize: 32),
           ),
+          actions: [
+            //TODO: Implement sign out
+            IconButton(
+                onPressed: () {
+                  context.read<AuthCubit>().signOut();
+                },
+                icon: const Icon(Icons.quiz_outlined))
+          ],
         ),
         backgroundColor: Themes.noteColours['black'],
         bottomNavigationBar: const BottomNavBar(),
