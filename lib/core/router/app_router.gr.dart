@@ -7,6 +7,7 @@
 import 'package:auto_route/auto_route.dart' as _i1;
 import 'package:flutter/material.dart' as _i2;
 
+import '../../auth/ui/email_sign_in_page.dart' as _i6;
 import '../../auth/ui/login_page.dart' as _i3;
 import '../../auth/ui/register_page.dart' as _i4;
 import '../../notes/ui/home_page.dart' as _i5;
@@ -31,6 +32,11 @@ class AppRouter extends _i1.RootStackRouter {
         routeData: routeData,
         builder: (_) {
           return const _i5.HomePage();
+        }),
+    EmailSignInRoute.name: (routeData) => _i1.MaterialPageX<dynamic>(
+        routeData: routeData,
+        builder: (_) {
+          return const _i6.EmailSignInPage();
         })
   };
 
@@ -38,7 +44,8 @@ class AppRouter extends _i1.RootStackRouter {
   List<_i1.RouteConfig> get routes => [
         _i1.RouteConfig(LoginRoute.name, path: 'login'),
         _i1.RouteConfig(RegisterRoute.name, path: 'register'),
-        _i1.RouteConfig(HomeRoute.name, path: 'home')
+        _i1.RouteConfig(HomeRoute.name, path: 'home'),
+        _i1.RouteConfig(EmailSignInRoute.name, path: 'email-sign-in')
       ];
 }
 
@@ -58,4 +65,10 @@ class HomeRoute extends _i1.PageRouteInfo {
   const HomeRoute() : super(name, path: 'home');
 
   static const String name = 'HomeRoute';
+}
+
+class EmailSignInRoute extends _i1.PageRouteInfo {
+  const EmailSignInRoute() : super(name, path: 'email-sign-in');
+
+  static const String name = 'EmailSignInRoute';
 }

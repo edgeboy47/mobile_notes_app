@@ -23,7 +23,7 @@ class LoginPage extends StatelessWidget {
               ),
               ElevatedButton(
                 onPressed: () {
-                  AutoRouter.of(context).push(const RegisterRoute());
+                  AutoRouter.of(context).push(const EmailSignInRoute());
                 },
                 child: const Text('Continue With Email'),
               ),
