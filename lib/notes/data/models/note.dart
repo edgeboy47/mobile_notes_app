@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:hive/hive.dart';
 import 'package:mobile_notes_app/notes/data/models/tag.dart';
@@ -17,6 +18,14 @@ class Note extends Equatable {
     this.tags,
     this.tasks,
   }) : id = id ?? const Uuid().v1();
+
+  factory Note.fromJson(Map<String, dynamic> json) {
+    return Note(
+      body: json['body'],
+      title: json['title'],
+      dateTime: (json['time'] as Timestamp).toDate(),
+    );
+  }
 
   @HiveField(0)
   final String title;
@@ -80,5 +89,14 @@ class Note extends Equatable {
       tasks:
           (setTasksNull != null && setTasksNull) ? null : (tasks ?? this.tasks),
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'body': body,
+      'title': title,
+      'dateTime': dateTime,
+      'id': id,
+    };
   }
 }

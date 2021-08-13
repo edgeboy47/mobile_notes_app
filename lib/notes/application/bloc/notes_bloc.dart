@@ -4,6 +4,7 @@ import 'package:equatable/equatable.dart';
 import 'package:mobile_notes_app/notes/data/data_sources/data_source.dart';
 import 'package:mobile_notes_app/notes/data/models/note.dart';
 import 'package:mobile_notes_app/notes/data/models/task.dart';
+import 'package:mobile_notes_app/notes/data/repository/repository.dart';
 part 'notes_event.dart';
 part 'notes_state.dart';
 
@@ -13,7 +14,7 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
   }
 
   //TODO: Switch to Repository object
-  final DataSource repository;
+  final Repository repository;
 
   @override
   Stream<NotesState> mapEventToState(

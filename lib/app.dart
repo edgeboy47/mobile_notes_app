@@ -5,7 +5,9 @@ import 'package:mobile_notes_app/auth/application/cubit/auth_cubit.dart';
 import 'package:mobile_notes_app/auth/data/authenticator.dart';
 import 'package:mobile_notes_app/core/router/app_router.gr.dart';
 import 'package:mobile_notes_app/notes/application/bloc/notes_bloc.dart';
+import 'package:mobile_notes_app/notes/data/data_sources/firestore.dart';
 import 'package:mobile_notes_app/notes/data/data_sources/hive_db.dart';
+import 'package:mobile_notes_app/notes/data/repository/repository_impl.dart';
 import 'package:mobile_notes_app/ui/themes.dart';
 
 class App extends StatelessWidget {
@@ -18,9 +20,12 @@ class App extends StatelessWidget {
       providers: [
         BlocProvider(
           create: (context) => NotesBloc(
-            repository: HiveDatabase(
-              notesBox: Hive.box('notesBox'),
-              tagsBox: Hive.box('tagsBox'),
+            repository: RepositoryImpl(
+              localDataSource: HiveDatabase(
+                notesBox: Hive.box('notesBox'),
+                tagsBox: Hive.box('tagsBox'),
+              ),
+              remoteDataSource: FirestoreDataSource(),
             ),
           ),
         ),
