@@ -4,14 +4,17 @@ import 'package:mobile_notes_app/notes/data/models/task.dart';
 import 'package:mobile_notes_app/notes/data/models/tag.dart';
 import 'package:mobile_notes_app/notes/data/repository/repository.dart';
 
-class RepositoryImpl extends Repository {
+class RepositoryImpl implements Repository {
   const RepositoryImpl({
-    required DataSource localDataSource,
-    required DataSource remoteDataSource,
-  }) : super(
-            localDataSource: localDataSource,
-            remoteDataSource: remoteDataSource);
+    required this.localDataSource,
+    required this.remoteDataSource,
+  });
 
+  //TODO: Add class to check connectivity before doing online actions
+  // connectivity_plus package
+
+  final DataSource localDataSource;
+  final DataSource remoteDataSource;
   // Note Functions
   @override
   Future<void> addNote(Note note) async {
@@ -20,22 +23,24 @@ class RepositoryImpl extends Repository {
   }
 
   @override
-  Future<void> deleteNote(String id) {
-    // TODO: implement deleteNote
-    throw UnimplementedError();
+  Future<void> deleteNote(String id) async {
+    await remoteDataSource.deleteNote(id);
+    await localDataSource.deleteNote(id);
   }
 
   @override
   Future<void> updateNote(Note note, String? id) async {
-    // TODO: implement updateNote
     await localDataSource.updateNote(note, id);
     await remoteDataSource.updateNote(note, id);
   }
 
   @override
   Future<List<Note>> loadNotes() async {
-    //TODO: implement loadNotes
-    return await localDataSource.loadNotes();
+    //TODO: sync local and remote sources on load, implement as Stream
+
+    // If database is loaded, read from database, else read from online and
+    // store in database
+    return await remoteDataSource.loadNotes();
   }
 
   // Tag Functions
@@ -65,20 +70,20 @@ class RepositoryImpl extends Repository {
 
   // Task Functions
   @override
-  Future<void> addTask(String noteId, Task task) {
-    // TODO: implement addTask
-    throw UnimplementedError();
+  Future<void> addTask(String noteId, Task task) async {
+    await localDataSource.addTask(noteId, task);
+    await remoteDataSource.addTask(noteId, task);
   }
 
   @override
-  Future<void> deleteTask(String noteId, Task task) {
-    // TODO: implement deleteTask
-    throw UnimplementedError();
+  Future<void> deleteTask(String noteId, Task task) async {
+    await localDataSource.deleteTask(noteId, task);
+    await remoteDataSource.deleteTask(noteId, task);
   }
 
   @override
-  Future<void> updateTask(String noteId, Task oldTask, Task newTask) {
-    // TODO: implement updateTask
-    throw UnimplementedError();
+  Future<void> updateTask(String noteId, Task oldTask, Task newTask) async {
+    await localDataSource.updateTask(noteId, oldTask, newTask);
+    await remoteDataSource.updateTask(noteId, oldTask, newTask);
   }
 }

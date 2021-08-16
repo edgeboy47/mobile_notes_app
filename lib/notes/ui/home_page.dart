@@ -92,7 +92,9 @@ class NoteGrid extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<NotesBloc, NotesState>(
       builder: (context, state) {
-        if (state is NotesLoading) return const CircularProgressIndicator();
+        if (state is NotesLoading)
+          return const Center(child: CircularProgressIndicator());
+
         if (state is NotesLoadSuccess) {
           var notes = state.notes;
           if (notes.isEmpty)

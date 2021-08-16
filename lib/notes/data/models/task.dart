@@ -7,6 +7,13 @@ part 'task.g.dart';
 class Task extends Equatable {
   const Task({required this.body, required this.isCompleted});
 
+  factory Task.fromJson(Map<String, dynamic> json) {
+    return Task(
+      body: json['body'],
+      isCompleted: json['isCompleted'],
+    );
+  }
+
   @HiveField(0)
   final String body;
 
@@ -21,5 +28,12 @@ class Task extends Equatable {
       body: body ?? this.body,
       isCompleted: isCompleted ?? this.isCompleted,
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'body': body,
+      'isCompleted': isCompleted,
+    };
   }
 }

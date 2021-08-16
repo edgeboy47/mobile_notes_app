@@ -11,7 +11,6 @@ class HiveDatabase implements DataSource {
   });
 
   // TODO: Add tasks and tags boxes, and crud functions for each
-  // TODO: Link tasks to their respective note, Box<List<Task>> where note id is the key
   Box<Note> notesBox;
 
   Box<Tag> tagsBox;
@@ -77,10 +76,10 @@ class HiveDatabase implements DataSource {
 
   // Task Functions
   @override
-  Future<void> addTask(String noteId, Task task) async {
+  Future<void> addTask(String id, Task task) async {
     if (notesBox.isOpen == false) await _init();
 
-    final note = notesBox.get(noteId);
+    final note = notesBox.get(id);
     final tasks = note?.tasks;
 
     await updateNote(
@@ -88,7 +87,7 @@ class HiveDatabase implements DataSource {
         tasks: tasks == null ? [task] : [...tasks, task],
         dateTime: DateTime.now(),
       ),
-      noteId,
+      id,
     );
   }
 
@@ -116,7 +115,6 @@ class HiveDatabase implements DataSource {
     );
   }
 
-  //TODO: Implement update task
   @override
   Future<void> updateTask(String id, Task oldTask, Task newTask) async {
     if (notesBox.isOpen == false) await _init();

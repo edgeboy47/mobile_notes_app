@@ -4,14 +4,6 @@ import 'package:mobile_notes_app/notes/data/models/tag.dart';
 import 'package:mobile_notes_app/notes/data/models/task.dart';
 
 abstract class Repository {
-  const Repository({
-    required this.localDataSource,
-    required this.remoteDataSource,
-  });
-
-  final DataSource localDataSource;
-  final DataSource remoteDataSource;
-
 // Note Functions
   Future<void> addNote(Note note);
 

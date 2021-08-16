@@ -23,7 +23,11 @@ class Note extends Equatable {
     return Note(
       body: json['body'],
       title: json['title'],
-      dateTime: (json['time'] as Timestamp).toDate(),
+      dateTime: (json['dateTime'] as Timestamp).toDate(),
+      id: json['id'],
+      tasks: json['tasks'] == null
+          ? null
+          : (json['tasks'] as List).map((task) => Task.fromJson(task)).toList(),
     );
   }
 
@@ -97,6 +101,7 @@ class Note extends Equatable {
       'title': title,
       'dateTime': dateTime,
       'id': id,
+      'tasks': tasks?.map((task) => task.toJson()).toList()
     };
   }
 }
