@@ -18,11 +18,6 @@ class AuthCubit extends Cubit<AuthState> {
   AuthCubit(this._authenticator) : super(const AuthState.unauthenticated());
   final Authenticator _authenticator;
 
-  //TODO: Remove after setting up repo to sync with online storage
-  void freeSignIn() {
-    emit(const AuthState.authenticated());
-  }
-
   Future<void> signOut() async {
     await _authenticator.signOut();
     emit(const AuthState.unauthenticated());

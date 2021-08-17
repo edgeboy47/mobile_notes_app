@@ -17,12 +17,6 @@ class LoginPage extends StatelessWidget {
             children: [
               ElevatedButton(
                 onPressed: () {
-                  BlocProvider.of<AuthCubit>(context).freeSignIn();
-                },
-                child: const Text('Free Sign In'),
-              ),
-              ElevatedButton(
-                onPressed: () {
                   AutoRouter.of(context).push(const EmailSignInRoute());
                 },
                 child: const Text('Continue With Email'),

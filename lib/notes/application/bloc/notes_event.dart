@@ -67,3 +67,5 @@ class NoteTaskUpdated extends NotesEvent {
   @override
   List<Object> get props => [id, oldTask, newTask];
 }
+
+class NotesCleared extends NotesEvent {}

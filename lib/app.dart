@@ -40,21 +40,19 @@ class App extends StatelessWidget {
         listener: (context, state) {
           state.maybeMap(
             authenticated: (state) {
-              print('auth');
+              context.read<NotesBloc>().add(NotesLoaded());
               appRouter.pushAndPopUntil(
                 const HomeRoute(),
                 predicate: (_) => false,
               );
             },
             unknown: (state) {
-              print('unknown');
               appRouter.pushAndPopUntil(
                 const LoginRoute(),
                 predicate: (_) => false,
               );
             },
             unauthenticated: (state) {
-              print('unauth');
               appRouter.pushAndPopUntil(
                 const LoginRoute(),
                 predicate: (_) => false,

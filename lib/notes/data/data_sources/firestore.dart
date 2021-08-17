@@ -6,29 +6,36 @@ import 'package:mobile_notes_app/notes/data/models/tag.dart';
 import 'package:mobile_notes_app/notes/data/models/note.dart';
 
 class FirestoreDataSource implements DataSource {
-  final notesCollection = FirebaseFirestore.instance
-      .collection('notes')
-      .doc(FirebaseAuth.instance.currentUser!.uid)
-      .collection('user_notes');
+  final notesCollection = FirebaseFirestore.instance.collection('notes');
 
   // Note Functions
   @override
   Future<void> addNote(Note note) async {
-    await notesCollection.doc(note.id).set(note.toJson());
+    await notesCollection
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection('user_notes')
+        .doc(note.id)
+        .set(note.toJson());
   }
 
   @override
   Future<void> deleteNote(String id) async {
-    await notesCollection.doc(id).delete();
+    await notesCollection
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection('user_notes')
+        .doc(id)
+        .delete();
   }
 
   @override
   Future<List<Note>> loadNotes() async {
-    return (await notesCollection.get()).docs.map((snapshot) {
-      final data = snapshot.data();
-      print(data);
-      return Note.fromJson(data);
-    }).toList();
+    return (await notesCollection
+            .doc(FirebaseAuth.instance.currentUser!.uid)
+            .collection('user_notes')
+            .get())
+        .docs
+        .map((snapshot) => Note.fromJson(snapshot.data()))
+        .toList();
   }
 
   @override
@@ -40,7 +47,11 @@ class FirestoreDataSource implements DataSource {
   // Task Functions
   @override
   Future<void> addTask(String id, Task task) async {
-    final noteDocument = await (notesCollection.doc(id).get());
+    final noteDocument = await (notesCollection
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection('user_notes')
+        .doc(id)
+        .get());
 
     if (noteDocument.exists) {
       final note = Note.fromJson(noteDocument.data()!);
@@ -58,7 +69,11 @@ class FirestoreDataSource implements DataSource {
 
   @override
   Future<void> deleteTask(String id, Task task) async {
-    final noteDocument = await (notesCollection.doc(id).get());
+    final noteDocument = await (notesCollection
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection('user_notes')
+        .doc(id)
+        .get());
 
     if (noteDocument.exists) {
       final note = Note.fromJson(noteDocument.data()!);
@@ -80,7 +95,11 @@ class FirestoreDataSource implements DataSource {
 
   @override
   Future<void> updateTask(String id, Task oldTask, Task newTask) async {
-    final noteDocument = await (notesCollection.doc(id).get());
+    final noteDocument = await (notesCollection
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection('user_notes')
+        .doc(id)
+        .get());
 
     if (noteDocument.exists) {
       final note = Note.fromJson(noteDocument.data()!);

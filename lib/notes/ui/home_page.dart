@@ -45,6 +45,7 @@ class HomePage extends StatelessWidget {
             IconButton(
                 onPressed: () {
                   context.read<AuthCubit>().signOut();
+                  context.read<NotesBloc>().add(NotesCleared());
                 },
                 icon: const Icon(Icons.quiz_outlined))
           ],

@@ -18,19 +18,19 @@ class RepositoryImpl implements Repository {
   // Note Functions
   @override
   Future<void> addNote(Note note) async {
-    await localDataSource.addNote(note);
+    // await localDataSource.addNote(note);
     await remoteDataSource.addNote(note);
   }
 
   @override
   Future<void> deleteNote(String id) async {
+    // await localDataSource.deleteNote(id);
     await remoteDataSource.deleteNote(id);
-    await localDataSource.deleteNote(id);
   }
 
   @override
   Future<void> updateNote(Note note, String? id) async {
-    await localDataSource.updateNote(note, id);
+    // await localDataSource.updateNote(note, id);
     await remoteDataSource.updateNote(note, id);
   }
 
@@ -71,19 +71,19 @@ class RepositoryImpl implements Repository {
   // Task Functions
   @override
   Future<void> addTask(String noteId, Task task) async {
-    await localDataSource.addTask(noteId, task);
+    // await localDataSource.addTask(noteId, task);
     await remoteDataSource.addTask(noteId, task);
   }
 
   @override
   Future<void> deleteTask(String noteId, Task task) async {
-    await localDataSource.deleteTask(noteId, task);
+    // await localDataSource.deleteTask(noteId, task);
     await remoteDataSource.deleteTask(noteId, task);
   }
 
   @override
   Future<void> updateTask(String noteId, Task oldTask, Task newTask) async {
-    await localDataSource.updateTask(noteId, oldTask, newTask);
+    // await localDataSource.updateTask(noteId, oldTask, newTask);
     await remoteDataSource.updateTask(noteId, oldTask, newTask);
   }
 }
