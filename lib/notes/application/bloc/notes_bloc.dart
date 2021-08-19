@@ -22,6 +22,12 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
       var notes = await repository.loadNotes();
       yield NotesLoadSuccess(notes);
     }
+    if (event is NotesWithCompletedTasks) {
+      if (state is NotesLoadSuccess)
+        yield NotesWithCompletedTasksLoadSuccess(
+            await repository.loadNotesWithCompletedTasks());
+      else if (state is NotesWithCompletedTasksLoadSuccess) add(NotesLoaded());
+    }
     if (event is NotesCleared) {
       yield const NotesLoadSuccess([]);
     }

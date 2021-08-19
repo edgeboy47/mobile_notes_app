@@ -19,3 +19,12 @@ class NotesLoadSuccess extends NotesState {
 }
 
 class NotesLoadFailed extends NotesState {}
+
+class NotesWithCompletedTasksLoadSuccess extends NotesState {
+  const NotesWithCompletedTasksLoadSuccess(this.notes);
+
+  final List<Note> notes;
+
+  @override
+  List<Object> get props => [notes];
+}

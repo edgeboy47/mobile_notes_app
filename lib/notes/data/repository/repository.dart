@@ -12,7 +12,9 @@ abstract class Repository {
   Future<void> deleteNote(String id);
 
   Future<void> updateNote(Note note, String? id);
-  
+
+  Future<List<Note>> loadNotesWithCompletedTasks();
+
   // Tag Functions
   Future<void> addTag(Tag tag);
 

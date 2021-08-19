@@ -30,7 +30,10 @@ class Authenticator {
   }
 
   Future<void> signOut() async {
-    if (FirebaseAuth.instance.currentUser != null) {
+    final googleSignIn = GoogleSignIn();
+    if (await googleSignIn.isSignedIn()) {
+      await googleSignIn.signOut();
+    } else if (FirebaseAuth.instance.currentUser != null) {
       await FirebaseAuth.instance.signOut();
     }
   }

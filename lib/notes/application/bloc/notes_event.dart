@@ -69,3 +69,5 @@ class NoteTaskUpdated extends NotesEvent {
 }
 
 class NotesCleared extends NotesEvent {}
+
+class NotesWithCompletedTasks extends NotesEvent {}

@@ -49,6 +49,12 @@ class HiveDatabase implements DataSource {
     await addNote(note);
   }
 
+  @override
+  Future<List<Note>> loadNotesWithCompletedTasks() {
+    // TODO: implement loadNotesWithCompletedTasks
+    throw UnimplementedError();
+  }
+
   // Tag Functions
   @override
   Future<void> addTag(Tag tag) async {

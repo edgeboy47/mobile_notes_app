@@ -115,6 +115,26 @@ class NoteGrid extends StatelessWidget {
             staggeredTileBuilder: (_) => const StaggeredTile.fit(1),
           );
         }
+
+        if (state is NotesWithCompletedTasksLoadSuccess) {
+          var notes = state.notes;
+          if (notes.isEmpty)
+            return Center(
+              child: Container(
+                child: const Text('No notes found'),
+              ),
+            );
+          return StaggeredGridView.countBuilder(
+            crossAxisCount: 2,
+            mainAxisSpacing: 16,
+            crossAxisSpacing: 16,
+            itemCount: notes.length,
+            itemBuilder: (context, index) => NoteCard(
+              note: notes[index],
+            ),
+            staggeredTileBuilder: (_) => const StaggeredTile.fit(1),
+          );
+        }
         return Container();
       },
     );
@@ -189,6 +209,15 @@ class BottomNavBar extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 20.0),
           child: Row(
             children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: IconButton(
+                  icon: const Icon(Icons.done),
+                  onPressed: () {
+                    context.read<NotesBloc>().add(NotesWithCompletedTasks());
+                  },
+                ),
+              ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: IconButton(

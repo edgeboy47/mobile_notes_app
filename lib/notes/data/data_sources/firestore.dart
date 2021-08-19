@@ -43,6 +43,22 @@ class FirestoreDataSource implements DataSource {
     await addNote(note);
   }
 
+  @override
+  Future<List<Note>> loadNotesWithCompletedTasks() async {
+    final notes = await loadNotes();
+
+    final filteredNotes = notes
+        .where((note) =>
+            note.tasks != null && note.tasks!.any((task) => task.isCompleted))
+        .map((note) {
+      final tasks = note.tasks;
+      return note.copyWith(
+          tasks: tasks!.where((task) => task.isCompleted).toList());
+    });
+
+    return filteredNotes.toList();
+  }
+
   //----------------------------------------------------------------------------
   // Task Functions
   @override

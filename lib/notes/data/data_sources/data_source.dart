@@ -8,10 +8,12 @@ abstract class DataSource {
 
   Future<List<Note>> loadNotes();
 
+  Future<List<Note>> loadNotesWithCompletedTasks();
+
   Future<void> deleteNote(String id);
 
   Future<void> updateNote(Note note, String? id);
-  
+
   // Tag Functions
   Future<void> addTag(Tag tag);
 

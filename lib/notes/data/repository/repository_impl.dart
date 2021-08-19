@@ -43,6 +43,11 @@ class RepositoryImpl implements Repository {
     return await remoteDataSource.loadNotes();
   }
 
+  @override
+  Future<List<Note>> loadNotesWithCompletedTasks() async {
+    return remoteDataSource.loadNotesWithCompletedTasks();
+  }
+
   // Tag Functions
   @override
   Future<void> addTag(Tag tag) {
